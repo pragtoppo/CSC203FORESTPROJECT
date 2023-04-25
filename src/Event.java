@@ -12,4 +12,10 @@ public final class Event {
         this.time = time;
         this.entity = entity;
     }
+
+    public Action getAction() {return action;}
+    public double getTime()
+    {
+        return time;
+    }
 }

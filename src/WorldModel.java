@@ -50,7 +50,7 @@ public final class WorldModel {
         List<Entity> ofType = new LinkedList<>();
         for (EntityKind kind : kinds) {
             for (Entity entity : this.entities) {
-                if (entity.kind == kind) {
+                if (entity.getKind() == kind) {
                     ofType.add(entity);
                 }
             }
