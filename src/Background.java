@@ -26,9 +26,7 @@ public final class Background {
     {
         return images;
     }
-    public static List<PImage> getImageList(ImageStore imageStore, String key) {
-        return imageStore.images.getOrDefault(key, imageStore.defaultImages);
-    }
+
     public static void loadImages(Scanner in, ImageStore imageStore, PApplet screen) {
         int lineNumber = 0;
         while (in.hasNextLine()) {
@@ -70,47 +68,23 @@ public final class Background {
     */
     public static void setAlpha(PImage img, int maskColor, int alpha) {
         int alphaValue = alpha << 24;
-        int nonAlpha = maskColor & Functions.COLOR_MASK;
+        int nonAlpha = maskColor & Functions.getColorMask();
         img.format = PApplet.ARGB;
         img.loadPixels();
         for (int i = 0; i < img.pixels.length; i++) {
-            if ((img.pixels[i] & Functions.COLOR_MASK) == nonAlpha) {
+            if ((img.pixels[i] & Functions.getColorMask()) == nonAlpha) {
                 img.pixels[i] = alphaValue | nonAlpha;
             }
         }
         img.updatePixels();
     }
 
-    public static Entity createHouse(String id, Point position, List<PImage> images) {
-        return new Entity(EntityKind.HOUSE, id, position, images, 0, 0, 0, 0, 0, 0);
-    }
-
-    public static Entity createObstacle(String id, Point position, double animationPeriod, List<PImage> images) {
-        return new Entity(EntityKind.OBSTACLE, id, position, images, 0, 0, 0, animationPeriod, 0, 0);
-    }
-
-    public static Entity createTree(String id, Point position, double actionPeriod, double animationPeriod, int health, List<PImage> images) {
-        return new Entity(EntityKind.TREE, id, position, images, 0, 0, actionPeriod, animationPeriod, health, 0);
-    }
-
-    public static Entity createStump(String id, Point position, List<PImage> images) {
-        return new Entity(EntityKind.STUMP, id, position, images, 0, 0, 0, 0, 0, 0);
-    }
-
-    // health starts at 0 and builds up until ready to convert to Tree
-    public static Entity createSapling(String id, Point position, List<PImage> images, int health) {
-        return new Entity(EntityKind.SAPLING, id, position, images, 0, 0, Functions.SAPLING_ACTION_ANIMATION_PERIOD, Functions.SAPLING_ACTION_ANIMATION_PERIOD, 0, Functions.SAPLING_HEALTH_LIMIT);
-    }
-
-    public static Entity createFairy(String id, Point position, double actionPeriod, double animationPeriod, List<PImage> images) {
-        return new Entity(EntityKind.FAIRY, id, position, images, 0, 0, actionPeriod, animationPeriod, 0, 0);
-    }
 
     public static PImage getCurrentImage(Object object) {
         if (object instanceof Background background) {
             return background.getImages().get(background.imageIndex);
         } else if (object instanceof Entity entity) {
-            return entity.images.get(entity.imageIndex % entity.images.size());
+            return entity.getImages().get(entity.getImageIndex() % entity.getImages().size());
         } else {
             throw new UnsupportedOperationException(String.format("getCurrentImage not supported for %s", object));
         }

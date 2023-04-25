@@ -4,11 +4,32 @@ import processing.core.PImage;
 import java.util.Optional;
 
 public final class WorldView {
-    public PApplet screen;
-    public WorldModel world;
-    public int tileWidth;
-    public int tileHeight;
-    public Viewport viewport;
+    private PApplet screen;
+    private WorldModel world;
+    private int tileWidth;
+    private int tileHeight;
+    private Viewport viewport;
+
+    public PApplet getScreen()
+    {
+        return screen;
+    }
+    public WorldModel getWorld()
+    {
+        return world;
+    }
+    public int getTileWidth()
+    {
+        return tileWidth;
+    }
+    public int getTileHeight()
+    {
+        return tileHeight;
+    }
+    public  Viewport getViewport()
+    {
+        return viewport;
+    }
 
     public WorldView(int numRows, int numCols, PApplet screen, WorldModel world, int tileWidth, int tileHeight) {
         this.screen = screen;
@@ -42,8 +63,8 @@ public final class WorldView {
     }
 
     public void drawBackground() {
-        for (int row = 0; row < this.viewport.numRows; row++) {
-            for (int col = 0; col < this.viewport.numCols; col++) {
+        for (int row = 0; row < this.viewport.getNumRows(); row++) {
+            for (int col = 0; col < this.viewport.getNumCols(); col++) {
                 Point worldPoint = viewport.viewportToWorld(col, row);
                 Optional<PImage> image = getBackgroundImage(this.world, worldPoint);
                 if (image.isPresent()) {
@@ -53,8 +74,8 @@ public final class WorldView {
         }
     }
     public void shiftView(int colDelta, int rowDelta) {
-        int newCol = Functions.clamp(this.viewport.col + colDelta, 0, this.world.numCols - this.viewport.numCols);
-        int newRow = Functions.clamp(this.viewport.row + rowDelta, 0, this.world.numRows - this.viewport.numRows);
+        int newCol = Functions.clamp(this.viewport.getCol() + colDelta, 0, this.world.numCols - this.viewport.getNumCols());
+        int newRow = Functions.clamp(this.viewport.getRow() + rowDelta, 0, this.world.numRows - this.viewport.getNumRows());
 
         viewport.shift(newCol, newRow);
     }

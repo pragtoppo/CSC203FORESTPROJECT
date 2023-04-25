@@ -4,22 +4,34 @@ import java.util.*;
  * Keeps track of events that have been scheduled.
  */
 public final class EventScheduler {
-    public PriorityQueue<Event> eventQueue;
-    public Map<Entity, List<Event>> pendingEvents;
-    public double currentTime;
+    private PriorityQueue<Event> eventQueue;
+    private Map<Entity, List<Event>> pendingEvents;
+    private double currentTime;
 
     public EventScheduler() {
         this.eventQueue = new PriorityQueue<>(new EventComparator());
         this.pendingEvents = new HashMap<>();
         this.currentTime = 0;
     }
+    public PriorityQueue<Event> getEventQueue()
+    {
+        return eventQueue;
+    }
+    public Map<Entity, List<Event>> getPendingEvents()
+    {
+        return  pendingEvents;
+    }
+    public  double getCurrentTime()
+    {
+        return currentTime;
+    }
     public void updateOnTime(double time) {
         double stopTime = this.currentTime + time;
         while (!this.eventQueue.isEmpty() && this.eventQueue.peek().time <= stopTime) {
             Event next = this.eventQueue.poll();
-            removePendingEvent(this, next);
+            removePendingEvent(next);
             this.currentTime = next.time;
-            Action.executeAction( this);
+            next.getAction().executeAction(this);
         }
         this.currentTime = stopTime;
     }

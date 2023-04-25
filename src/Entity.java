@@ -7,17 +7,17 @@ import processing.core.PImage;
  * different kinds of entities that exist.
  */
 public final class Entity {
-    public EntityKind kind;
-    public String id;
+    private EntityKind kind;
+    private String id;
     public Point position;
-    public List<PImage> images;
-    public int imageIndex;
-    public int resourceLimit;
-    public int resourceCount;
-    public double actionPeriod;
-    public double animationPeriod;
-    public int health;
-    public int healthLimit;
+    private List<PImage> images;
+    private int imageIndex;
+    private int resourceLimit;
+    private int resourceCount;
+    private double actionPeriod;
+    private double animationPeriod;
+    private int health;
+    private int healthLimit;
 
     public Entity(EntityKind kind, String id, Point position, List<PImage> images, int resourceLimit, int resourceCount, double actionPeriod, double animationPeriod, int health, int healthLimit) {
         this.kind = kind;
@@ -32,6 +32,44 @@ public final class Entity {
         this.health = health;
         this.healthLimit = healthLimit;
     }
+    public EntityKind getKind()
+    {
+        return kind;
+    }
+    public String getId()
+    {
+        return id;
+    }
+    public List<PImage> getImages()
+    {
+        return images;
+    }
+    public int getImageIndex()
+    {
+        return imageIndex;
+    }
+    public int getResourceLimit()
+    {
+        return resourceLimit;
+    }
+    public int getResourceCount()
+    {
+        return resourceCount;
+    }
+    public double getActionPeriod()
+    {
+        return  actionPeriod;
+    }
+    public int getHealth()
+    {
+        return  health;
+    }
+    public int getHealthLimit()
+    {
+        return healthLimit;
+    }
+
+
 
     /**
      * Helper method for testing. Preserve this functionality while refactoring.
@@ -55,7 +93,7 @@ public final class Entity {
 
     public void executeSaplingActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         this.health++;
-        if (!transformPlant( world, scheduler, imageStore)) {
+        if (transformPlant( world, scheduler, imageStore)) {
             scheduler.scheduleEvent(this,Functions.createActivityAction(this, world, imageStore), this.actionPeriod);
         }
     }
@@ -63,7 +101,7 @@ public final class Entity {
 
     public void executeTreeActivity( WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
 
-        if (!transformPlant( world, scheduler, imageStore)) {
+        if (transformPlant( world, scheduler, imageStore)) {
 
             scheduler.scheduleEvent( this, Functions.createActivityAction(this, world, imageStore), this.actionPeriod);
         }
@@ -77,10 +115,10 @@ public final class Entity {
 
             if (moveToFairy( world, fairyTarget.get(), scheduler)) {
 
-                Entity sapling = Background.createSapling(Functions.SAPLING_KEY + "_" + fairyTarget.get().id, tgtPos, Background.getImageList(imageStore, Functions.SAPLING_KEY), 0);
+                Entity sapling = Functions.createSapling(Functions.getSaplingKey() + "_" + fairyTarget.get().id, tgtPos, imageStore.getImageList(Functions.getSaplingKey()), 0);
 
-                world.addEntity( sapling);
-                VirtualWorld.scheduleActions(sapling, scheduler, world, imageStore);
+                world.addEntity(sapling);
+                sapling.scheduleActions(scheduler, world, imageStore);
             }
         }
 
@@ -90,7 +128,7 @@ public final class Entity {
     public void executeDudeNotFullActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         Optional<Entity> target = world.findNearest( this.position, new ArrayList<>(Arrays.asList(EntityKind.TREE, EntityKind.SAPLING)));
 
-        if (target.isEmpty() || !moveToNotFull( world, target.get(), scheduler) || !transformNotFull( world, scheduler, imageStore)) {
+        if (target.isEmpty() || !this.moveToNotFull( world, target.get(), scheduler) || !transformNotFull( world, scheduler, imageStore)) {
             scheduler.scheduleEvent(this, Functions.createActivityAction(this, world, imageStore), this.actionPeriod);
         }
     }
@@ -98,7 +136,7 @@ public final class Entity {
     public void executeDudeFullActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         Optional<Entity> fullTarget = world.findNearest( this.position, new ArrayList<>(List.of(EntityKind.HOUSE)));
 
-        if (fullTarget.isPresent() && moveToFull( world, fullTarget.get(), scheduler)) {
+        if (fullTarget.isPresent() && moveToFull(world, fullTarget.get(), scheduler)) {
             transformFull( world, scheduler, imageStore);
         } else {
             scheduler.scheduleEvent( this, Functions.createActivityAction(this, world, imageStore), this.actionPeriod);
@@ -106,7 +144,7 @@ public final class Entity {
     }
 
     public void scheduleActions(EventScheduler scheduler, WorldModel world, ImageStore imageStore) {
-        switch (this.kind) {
+        switch (kind) {
             case DUDE_FULL:
                 scheduler.scheduleEvent( this, Functions.createActivityAction(this, world, imageStore), this.actionPeriod);
                 scheduler.scheduleEvent( this, Functions.createAnimationAction(this, 0), this.getAnimationPeriod());
@@ -133,7 +171,7 @@ public final class Entity {
 
             case TREE:
                 scheduler.scheduleEvent( this, Functions.createActivityAction(this, world, imageStore), this.actionPeriod);
-                 scheduler.scheduleEvent(this, Functions.createAnimationAction(this, 0), this.getAnimationPeriod());
+                scheduler.scheduleEvent(this, Functions.createAnimationAction(this, 0), this.getAnimationPeriod());
                 break;
 
             default:
@@ -142,13 +180,14 @@ public final class Entity {
 
     public boolean transformNotFull(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
         if (this.resourceCount >= this.resourceLimit) {
-            Entity dude = Functions.createDudeFull(this.id, this.position, this.actionPeriod, this.animationPeriod, this.resourceLimit, this.images);
+            Entity dude = Functions.createDudeFull(this.id, this.position, this.actionPeriod,
+                    this.animationPeriod, this.resourceLimit, this.images);
 
             world.removeEntity(scheduler,this);
             scheduler.unscheduleAllEvents(this);
 
-            world.addEntity( dude);
-            scheduleActions(dude, scheduler, world, imageStore);
+            world.addEntity(dude);
+            dude.scheduleActions(scheduler, world, imageStore);
 
             return true;
         }
@@ -156,18 +195,19 @@ public final class Entity {
     }
 
     public void transformFull(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
-        Entity dude = Functions.createDudeNotFull(this.id, this.position, this.actionPeriod, this.animationPeriod, this.resourceLimit, this.images);
+        Entity dude = Functions.createDudeNotFull(this.id, this.position, this.actionPeriod,
+                this.animationPeriod, this.resourceLimit, this.images);
 
         world.removeEntity( scheduler, this);
         world.addEntity(dude);
-        scheduleActions(scheduler, world, imageStore);
+        dude.scheduleActions(scheduler, world, imageStore);
     }
 
     public boolean transformPlant(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
         if (this.kind == EntityKind.TREE) {
-            return this.transformTree( world, scheduler, imageStore);
+            return !this.transformTree( world, scheduler, imageStore);
         } else if (this.kind == EntityKind.SAPLING) {
-            return this.transformSapling( world, scheduler, imageStore);
+            return !this.transformSapling( world, scheduler, imageStore);
         } else {
             throw new UnsupportedOperationException(String.format("transformPlant not supported for %s", this));
         }
@@ -175,9 +215,10 @@ public final class Entity {
 
     public boolean transformTree(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
         if (this.health <= 0) {
-            Entity stump = Background.createStump(Functions.STUMP_KEY + "_" + this.id, this.position, Background.getImageList(imageStore, Functions.STUMP_KEY));
+            Entity stump = Functions.createStump(Functions.getStumpKey() + "_" + this.id, this.position, imageStore.getImageList( Functions.getStumpKey()));
 
             world.removeEntity(scheduler, this);
+
 
             world.addEntity(stump);
 
@@ -188,21 +229,26 @@ public final class Entity {
     }
 
     public boolean transformSapling(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
-        if (this.health <= 0) {
-            Entity stump = Background.createStump(Functions.STUMP_KEY + "_" + this.id, this.position, Background.getImageList(imageStore, Functions.STUMP_KEY));
+        if (health <= 0) {
+            Entity stump = Functions.createStump(Functions.getStumpKey() + "_" + this.id, this.position,
+                    imageStore.getImageList(Functions.getStumpKey()));
 
             world.removeEntity( scheduler, this);
 
             world.addEntity(stump);
 
             return true;
-        } else if (this.health >= this.healthLimit) {
-            Entity tree = Background.createTree(Functions.TREE_KEY + "_" + this.id, this.position, Functions.getNumFromRange(Functions.TREE_ACTION_MAX, Functions.TREE_ACTION_MIN), Functions.getNumFromRange(Functions.TREE_ANIMATION_MAX, Functions.TREE_ANIMATION_MIN), Functions.getIntFromRange(Functions.TREE_HEALTH_MAX, Functions.TREE_HEALTH_MIN), Background.getImageList(imageStore, Functions.TREE_KEY));
+        } else if (health >= healthLimit) {
+            Entity tree = Functions.createTree(Functions.getTreeKey() + "_" + this.id, this.position,
+                    Functions.getNumFromRange(Functions.getTreeActionMax(), Functions.getTreeAnimationMin()),
+                    Functions.getNumFromRange(Functions.getTreeAnimationMax(), Functions.getTreeAnimationMin()),
+                    Functions.getIntFromRange(Functions.getTreeHealthMax(), Functions.getTreeHealthMin()),
+                    imageStore.getImageList(Functions.getTreeKey()));
 
             world.removeEntity( scheduler, this);
 
-            world.addEntity( tree);
-            this.scheduleActions(tree, scheduler, world, imageStore);
+            world.addEntity(tree);
+            tree.scheduleActions(scheduler, world, imageStore);
 
             return true;
         }
@@ -215,7 +261,7 @@ public final class Entity {
             world.removeEntity( scheduler, target);
             return true;
         } else {
-            Point nextPos = nextPositionFairy(this, world, target.position);
+            Point nextPos = nextPositionFairy( world, target.position);
 
             if (!this.position.equals(nextPos)) {
                 world.moveEntity( scheduler, this, nextPos);
@@ -224,13 +270,13 @@ public final class Entity {
         }
     }
 
-    public boolean moveToNotFull(WorldModel world, EventScheduler scheduler) {
-        if (Point.adjacent(this.position, this.position)) {
+    public boolean moveToNotFull(WorldModel world, Entity target, EventScheduler scheduler) {
+        if (Point.adjacent(position, target.position)) {
             this.resourceCount += 1;
-            this.health--;
+            target.health--;
             return true;
         } else {
-            Point nextPos = nextPositionDude( world, this.position);
+            Point nextPos = nextPositionDude( world, target.position);
 
             if (!this.position.equals(nextPos)) {
                 world.moveEntity( scheduler, this, nextPos);
@@ -270,4 +316,19 @@ public final class Entity {
 
         return newPos;
     }
+    public boolean moveToFull(WorldModel world, Entity target, EventScheduler scheduler) {
+        if (Point.adjacent(this.position, target.position)) {
+            return true;
+        } else {
+            Point nextPos = this.nextPositionDude( world, target.position);
+
+            if (!this.position.equals(nextPos)) {
+                world.moveEntity( scheduler, this, nextPos);
+            }
+            return false;
+        }
+    }
+
+
+
 }
