@@ -13,24 +13,16 @@ public final class EventScheduler {
         this.pendingEvents = new HashMap<>();
         this.currentTime = 0;
     }
-    public PriorityQueue<Event> getEventQueue()
-    {
-        return eventQueue;
-    }
-    public Map<Entity, List<Event>> getPendingEvents()
-    {
-        return  pendingEvents;
-    }
     public  double getCurrentTime()
     {
         return currentTime;
     }
     public void updateOnTime(double time) {
         double stopTime = this.currentTime + time;
-        while (!this.eventQueue.isEmpty() && this.eventQueue.peek().time <= stopTime) {
+        while (!this.eventQueue.isEmpty() && this.eventQueue.peek().getTime() <= stopTime) {
             Event next = this.eventQueue.poll();
             removePendingEvent(next);
-            this.currentTime = next.time;
+            this.currentTime = next.getTime();
             next.getAction().executeAction(this);
         }
         this.currentTime = stopTime;
@@ -56,8 +48,8 @@ public final class EventScheduler {
             }
         }
     }
-    public void removePendingEvent(Event event) {
-        List<Event> pending = this.pendingEvents.get(event.entity);
+    private void removePendingEvent(Event event) {
+        List<Event> pending = this.pendingEvents.get(event.getEntity());
 
         if (pending != null) {
             pending.remove(event);

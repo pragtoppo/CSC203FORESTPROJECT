@@ -18,10 +18,6 @@ public final class Background {
         this.id = id;
         this.images = images;
     }
-    public String getId()
-    {
-        return id;
-    }
     public List<PImage> getImages()
     {
         return images;
@@ -39,7 +35,7 @@ public final class Background {
         }
     }
 
-    public static void processImageLine(Map<String, List<PImage>> images, String line, PApplet screen) {
+    private static void processImageLine(Map<String, List<PImage>> images, String line, PApplet screen) {
         String[] attrs = line.split("\\s");
         if (attrs.length >= 2) {
             String key = attrs[0];
@@ -58,7 +54,7 @@ public final class Background {
         }
     }
 
-    public static List<PImage> getImages(Map<String, List<PImage>> images, String key) {
+    private static List<PImage> getImages(Map<String, List<PImage>> images, String key) {
         return images.computeIfAbsent(key, k -> new LinkedList<>());
     }
 
@@ -66,7 +62,7 @@ public final class Background {
       Called with color for which alpha should be set and alpha value.
       setAlpha(img, color(255, 255, 255), 0));
     */
-    public static void setAlpha(PImage img, int maskColor, int alpha) {
+    private static void setAlpha(PImage img, int maskColor, int alpha) {
         int alphaValue = alpha << 24;
         int nonAlpha = maskColor & Functions.getColorMask();
         img.format = PApplet.ARGB;

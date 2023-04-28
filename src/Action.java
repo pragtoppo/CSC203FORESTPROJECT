@@ -38,7 +38,7 @@ public final class Action {
             case ANIMATION -> this.executeAnimationAction(scheduler);
         }
     }
-    public void executeActivityAction(EventScheduler scheduler) {
+    private void executeActivityAction(EventScheduler scheduler) {
         switch (entity.getKind()) {
             case SAPLING:
                 entity.executeSaplingActivity(world, imageStore, scheduler);
@@ -59,7 +59,7 @@ public final class Action {
                 throw new UnsupportedOperationException(String.format("executeActivityAction not supported for %s", entity.getKind()));
         }
     }
-    public void executeAnimationAction(EventScheduler scheduler) {
+    private void executeAnimationAction(EventScheduler scheduler) {
         Entity.nextImage(this.getEntity());
 
         if (this.repeatCount != 1) {

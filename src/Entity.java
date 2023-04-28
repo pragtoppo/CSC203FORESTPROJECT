@@ -76,7 +76,7 @@ public final class Entity {
      */
     public String log() {
         return this.id.isEmpty() ? null :
-                String.format("%s %d %d %d", this.id, this.position.x, this.position.y, this.imageIndex);
+                String.format("%s %d %d %d", this.id, this.position.getX(), this.position.getY(), this.imageIndex);
     }
 
     public static void nextImage(Entity entity) {
@@ -286,12 +286,12 @@ public final class Entity {
     }
 
     public Point nextPositionFairy(WorldModel world, Point destPos) {
-        int horiz = Integer.signum(destPos.x - this.position.x);
-        Point newPos = new Point(this.position.x + horiz, this.position.y);
+        int horiz = Integer.signum(destPos.getX() - this.position.getX());
+        Point newPos = new Point(this.position.getX() + horiz, this.position.getY());
 
         if (horiz == 0 || world.isOccupied( newPos) && world.getOccupancyCell( newPos).kind != EntityKind.HOUSE) {
-            int vert = Integer.signum(destPos.y - this.position.y);
-            newPos = new Point(this.position.x, this.position.y + vert);
+            int vert = Integer.signum(destPos.getY() - this.position.getY());
+            newPos = new Point(this.position.getX(), this.position.getY() + vert);
 
             if (vert == 0 || world.isOccupied( newPos) && world.getOccupancyCell( newPos).kind != EntityKind.HOUSE) {
                 newPos = this.position;
@@ -302,12 +302,12 @@ public final class Entity {
     }
 
     public Point nextPositionDude(WorldModel world, Point destPos) {
-        int horiz = Integer.signum(destPos.x - this.position.x);
-        Point newPos = new Point(this.position.x + horiz, this.position.y);
+        int horiz = Integer.signum(destPos.getX() - this.position.getX());
+        Point newPos = new Point(this.position.getX() + horiz, this.position.getY());
 
         if (horiz == 0 || world.isOccupied(newPos) && world.getOccupancyCell( newPos).kind != EntityKind.STUMP) {
-            int vert = Integer.signum(destPos.y - this.position.y);
-            newPos = new Point(this.position.x, this.position.y + vert);
+            int vert = Integer.signum(destPos.getY() - this.position.getY());
+            newPos = new Point(this.position.getX(), this.position.getY() + vert);
 
             if (vert == 0 || world.isOccupied( newPos) && world.getOccupancyCell( newPos).kind != EntityKind.STUMP) {
                 newPos = this.position;

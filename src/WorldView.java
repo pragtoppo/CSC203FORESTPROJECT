@@ -10,22 +10,6 @@ public final class WorldView {
     private int tileHeight;
     private Viewport viewport;
 
-    public PApplet getScreen()
-    {
-        return screen;
-    }
-    public WorldModel getWorld()
-    {
-        return world;
-    }
-    public int getTileWidth()
-    {
-        return tileWidth;
-    }
-    public int getTileHeight()
-    {
-        return tileHeight;
-    }
     public  Viewport getViewport()
     {
         return viewport;
@@ -38,13 +22,13 @@ public final class WorldView {
         this.tileHeight = tileHeight;
         this.viewport = new Viewport(numRows, numCols);
     }
-    public void drawEntities() {
-        for (Entity entity : this.world.entities) {
+    private void drawEntities() {
+        for (Entity entity : this.world.getEntities()) {
             Point pos = entity.position;
 
             if (viewport.contains(pos)) {
-                Point viewPoint = viewport.worldToViewport( pos.x, pos.y);
-                this.screen.image(Background.getCurrentImage(entity), viewPoint.x * this.tileWidth, viewPoint.y * this.tileHeight);
+                Point viewPoint = viewport.worldToViewport(pos.getX(), pos.getY());
+                this.screen.image(Background.getCurrentImage(entity), viewPoint.getX() * this.tileWidth, viewPoint.getY() * this.tileHeight);
             }
         }
     }
@@ -54,7 +38,7 @@ public final class WorldView {
         this.drawEntities();
     }
 
-    public static Optional<PImage> getBackgroundImage(WorldModel world, Point pos) {
+    private static Optional<PImage> getBackgroundImage(WorldModel world, Point pos) {
         if (world.withinBounds(pos)) {
             return Optional.of(Background.getCurrentImage(world.getBackgroundCell( pos)));
         } else {
@@ -62,7 +46,7 @@ public final class WorldView {
         }
     }
 
-    public void drawBackground() {
+    private void drawBackground() {
         for (int row = 0; row < this.viewport.getNumRows(); row++) {
             for (int col = 0; col < this.viewport.getNumCols(); col++) {
                 Point worldPoint = viewport.viewportToWorld(col, row);
@@ -74,8 +58,8 @@ public final class WorldView {
         }
     }
     public void shiftView(int colDelta, int rowDelta) {
-        int newCol = Functions.clamp(this.viewport.getCol() + colDelta, 0, this.world.numCols - this.viewport.getNumCols());
-        int newRow = Functions.clamp(this.viewport.getRow() + rowDelta, 0, this.world.numRows - this.viewport.getNumRows());
+        int newCol = Functions.clamp(this.viewport.getCol() + colDelta, 0, this.world.getNumCols() - this.viewport.getNumCols());
+        int newRow = Functions.clamp(this.viewport.getRow() + rowDelta, 0, this.world.getNumRows() - this.viewport.getNumRows());
 
         viewport.shift(newCol, newRow);
     }

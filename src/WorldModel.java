@@ -6,16 +6,43 @@ import java.util.*;
  * location in the world, and the entities that populate the world.
  */
 public final class WorldModel {
-    public int numRows;
+    private int numRows;
     public int numCols;
-    public Background[][] background;
-    public Entity[][] occupancy;
-    public Set<Entity> entities;
+
+    private Background[][] background;
+    private Entity[][] occupancy;
+    private Set<Entity> entities;
 
     public WorldModel() {
 
     }
 
+    public int getNumRows() { return numRows; }
+
+    public int getNumCols() {return numCols;}
+
+    public void setNumRows(int NumRows) {numRows = NumRows;}
+
+    public void setNumCols(int NumCols) {numCols = NumCols;}
+    public Background[][] getBackground()
+    {
+        return background;
+    }
+    public void setBackground(Background[][] background) {
+        this.background = background;
+    }
+    public void setOccupancy(Entity[][] occupancy)
+    {
+        this.occupancy = occupancy;
+    }
+    public Set<Entity> getEntities()
+    {
+        return entities;
+    }
+    public void setEntities(Set<Entity> entities)
+    {
+        this.entities = entities;
+    }
     /**
      * Helper method for testing. Don't move or modify this method.
      */
@@ -39,7 +66,7 @@ public final class WorldModel {
     }
 
     public boolean withinBounds(Point pos) {
-        return pos.y >= 0 && pos.y < this.numRows && pos.x >= 0 && pos.x < this.numCols;
+        return pos.getY() >= 0 && pos.getY() < this.numRows && pos.getX() >= 0 && pos.getX() < this.numCols;
     }
 
     public boolean isOccupied(Point pos) {
@@ -86,7 +113,7 @@ public final class WorldModel {
         removeEntityAt(entity.position);
     }
 
-    public void removeEntityAt( Point pos) {
+    private void removeEntityAt( Point pos) {
         if (withinBounds( pos) && getOccupancyCell( pos) != null) {
             Entity entity = getOccupancyCell(pos);
 
@@ -108,15 +135,15 @@ public final class WorldModel {
     }
 
     public Entity getOccupancyCell(Point pos) {
-        return this.occupancy[pos.y][pos.x];
+        return this.occupancy[pos.getY()][pos.getX()];
     }
 
     public void setOccupancyCell( Point pos, Entity entity) {
-        this.occupancy[pos.y][pos.x] = entity;
+        this.occupancy[pos.getY()][pos.getX()] = entity;
     }
 
     public Background getBackgroundCell(Point pos) {
-        return this.background[pos.y][pos.x];
+        return this.background[pos.getY()][pos.getX()];
     }
 
 
