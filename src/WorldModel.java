@@ -7,7 +7,7 @@ import java.util.*;
  */
 public final class WorldModel {
     private int numRows;
-    public int numCols;
+    private int numCols;
 
     private Background[][] background;
     private Entity[][] occupancy;

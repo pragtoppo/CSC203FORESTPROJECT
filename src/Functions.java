@@ -76,7 +76,6 @@ public final class Functions {
         return KEYED_BLUE_IDX;
     }
     public static int getColorMask() { return COLOR_MASK; }
-    public static int getKeyedImageMin() { return KEYED_IMAGE_MIN; }
     public static String getStumpKey()
     {
         return STUMP_KEY;

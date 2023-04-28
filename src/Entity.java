@@ -48,26 +48,11 @@ public final class Entity {
     {
         return imageIndex;
     }
-    public int getResourceLimit()
-    {
-        return resourceLimit;
-    }
-    public int getResourceCount()
-    {
-        return resourceCount;
-    }
-    public double getActionPeriod()
-    {
-        return  actionPeriod;
-    }
     public int getHealth()
     {
         return  health;
     }
-    public int getHealthLimit()
-    {
-        return healthLimit;
-    }
+
 
 
 
