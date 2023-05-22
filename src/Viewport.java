@@ -41,6 +41,5 @@ public final class Viewport {
     public Point worldToViewport(int col, int row) {
         return new Point(col - this.col, row - this.row);
 
-
     }
 }

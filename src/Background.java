@@ -22,6 +22,10 @@ public final class Background {
     {
         return images;
     }
+    public int getImageIndex()
+    {
+        return imageIndex;
+    }
 
     public static void loadImages(Scanner in, ImageStore imageStore, PApplet screen) {
         int lineNumber = 0;
@@ -75,14 +79,8 @@ public final class Background {
         img.updatePixels();
     }
 
-
-    public static PImage getCurrentImage(Object object) {
-        if (object instanceof Background background) {
-            return background.getImages().get(background.imageIndex);
-        } else if (object instanceof Entity entity) {
-            return entity.getImages().get(entity.getImageIndex() % entity.getImages().size());
-        } else {
-            throw new UnsupportedOperationException(String.format("getCurrentImage not supported for %s", object));
-        }
+    public PImage getCurrentImage()
+    {
+        return this.getImages().get(this.imageIndex);
     }
 }

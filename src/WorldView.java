@@ -24,11 +24,11 @@ public final class WorldView {
     }
     private void drawEntities() {
         for (Entity entity : this.world.getEntities()) {
-            Point pos = entity.position;
+            Point pos = entity.getPosition();
 
             if (viewport.contains(pos)) {
                 Point viewPoint = viewport.worldToViewport(pos.getX(), pos.getY());
-                this.screen.image(Background.getCurrentImage(entity), viewPoint.getX() * this.tileWidth, viewPoint.getY() * this.tileHeight);
+                this.screen.image(entity.getCurrentImage(), viewPoint.getX() * this.tileWidth, viewPoint.getY() * this.tileHeight);
             }
         }
     }
@@ -38,19 +38,19 @@ public final class WorldView {
         this.drawEntities();
     }
 
-    private static Optional<PImage> getBackgroundImage(WorldModel world, Point pos) {
-        if (world.withinBounds(pos)) {
-            return Optional.of(Background.getCurrentImage(world.getBackgroundCell( pos)));
-        } else {
-            return Optional.empty();
-        }
-    }
+//    private static Optional<PImage> getBackgroundImage(WorldModel world, Point pos) {
+//        if (world.withinBounds(pos)) {
+//            return Optional.of(Background.getCurrentImage(world.getBackgroundCell( pos)));
+//        } else {
+//            return Optional.empty();
+//        }
+//    }
 
     private void drawBackground() {
         for (int row = 0; row < this.viewport.getNumRows(); row++) {
             for (int col = 0; col < this.viewport.getNumCols(); col++) {
                 Point worldPoint = viewport.viewportToWorld(col, row);
-                Optional<PImage> image = getBackgroundImage(this.world, worldPoint);
+                Optional<PImage> image = world.getBackgroundImage(worldPoint);
                 if (image.isPresent()) {
                     this.screen.image(image.get(), col * this.tileWidth, row * this.tileHeight);
                 }
