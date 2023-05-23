@@ -1,4 +1,5 @@
 public class Activity extends Action{
+    private Entity entity;
     private  WorldModel world;
     private ImageStore imageStore;
     public Activity(Entity entity, WorldModel world, ImageStore imageStore) {
@@ -6,7 +7,7 @@ public class Activity extends Action{
         this.world = world;
         this.imageStore =imageStore;
     }
-    @Override
+
     public void executeAction(EventScheduler scheduler) {
         if(this.getEntity() instanceof ActivityEntity)
         {

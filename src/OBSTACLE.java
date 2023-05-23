@@ -11,7 +11,10 @@ public class OBSTACLE implements Entity{
     private double actionPeriod;
 
     public OBSTACLE( String id, Point position, List<PImage> images, double animationPeriod) {
-        super();
+        this.id = id;
+        this.position = position;
+        this.images = images;
+        this.animationPeriod = animationPeriod;
     }
     public  String getId()
     {

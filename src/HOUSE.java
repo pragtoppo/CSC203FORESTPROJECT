@@ -12,7 +12,9 @@ public class HOUSE implements Entity{
 
 
     public HOUSE( String id, Point position, List<PImage> images) {
-        super();
+        this.id = id;
+        this.position = position;
+        this.images = images;
     }
     public  String getId()
     {

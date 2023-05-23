@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class FAIRY implements Entity{
+public class FAIRY implements Entity, ActivityEntity, AnimationEntity{
     String id;
     Point position;
     List<PImage> images;
@@ -13,8 +13,12 @@ public class FAIRY implements Entity{
     double animationPeriod;
 
 
-    public FAIRY(String id, Point position, double ActionPeriod, double ActionAnimation, List<PImage> images) {
-        super();
+    public FAIRY(String id, Point position, double actionPeriod, double animationPeriod, List<PImage> images) {
+        this.id = id;
+        this.position = position;
+        this.actionPeriod = actionPeriod;
+        this.animationPeriod = animationPeriod;
+        this.images = images;
     }
     public  String getId()
     {

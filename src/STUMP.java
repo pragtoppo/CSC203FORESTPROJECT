@@ -2,15 +2,17 @@ import processing.core.PImage;
 
 import java.util.List;
 
-public class STUMP implements Entity{
+public class STUMP implements Entity, AnimationEntity{
     String id;
     Point position;
     List<PImage> images;
     int imageIndex;
     private double animationPeriod;
     private double actionPeriod;
-    public STUMP( String id, Point position, List<PImage> images) {
-        super();
+    public STUMP(String id, Point position, List<PImage> images) {
+        this.id = id;
+        this.position = position;
+        this.images = images;
     }
     public  String getId()
     {

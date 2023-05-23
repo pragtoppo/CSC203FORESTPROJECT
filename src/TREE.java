@@ -3,14 +3,11 @@ import processing.core.PImage;
 import java.util.List;
 
 public class TREE extends SAPTREE{
-    String id;
-    Point position;
-    List<PImage> images;
-    int imageIndex;
-    double actionPeriod;
-    double animationPeriod;
-    int health;
-    int healthLimit;
+    private int imageIndex;
+   private double actionPeriod;
+    private double animationPeriod;
+    private int health;
+    private int healthLimit;
     public double getAnimationPeriod()
     {
         return animationPeriod;
@@ -21,32 +18,9 @@ public class TREE extends SAPTREE{
         this.actionPeriod =actionPeriod;
         this.animationPeriod = animationPeriod;
     }
-    public  String getId()
-    {
-        return id;
-    }
-    public Point getPosition() {
-        return position;
-    }
-    public  void setPosition(Point p)
-    {
-        position = p;
-    }
-    public List<PImage> getImages()
-    {
-        return images;
-    }
-    public  int getImageIndex()
-    {
-        return imageIndex;
-    }
     public String log() {
-        return this.id.isEmpty() ? null :
-                String.format("%s %d %d %d", this.id, this.position.getX(), this.position.getY(), this.imageIndex);
-    }
-    public void decreaseHealth()
-    {
-        health--;
+        return this.getId().isEmpty() ? null :
+                String.format("%s %d %d %d", this.getId(), this.getPosition().getX(), this.getPosition().getY(), this.imageIndex);
     }
 
     public void executeActivity( WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
@@ -59,7 +33,7 @@ public class TREE extends SAPTREE{
 //    transformTree
      public boolean transformPlant(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
         if (health <= 0) {
-            STUMP stump = new STUMP(Functions.getStumpKey() + "_" + id,position, imageStore.getImageList( Functions.getStumpKey()));
+            STUMP stump = new STUMP(Functions.getStumpKey() + "_" + this.getId(),this.getPosition(), imageStore.getImageList( Functions.getStumpKey()));
             world.removeEntity(scheduler, this);
             world.addEntity(stump);
             return true;
