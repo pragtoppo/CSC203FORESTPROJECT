@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.List;
 
-public class HOUSE implements Entity{
+public class HOUSE implements Entity {
     private String id;
     private Point position;
     private List<PImage> images;
@@ -49,7 +49,7 @@ public class HOUSE implements Entity{
         return this.getImages().get(this.getImageIndex() % this.getImages().size());
     }
     public void scheduleActions(EventScheduler scheduler, WorldModel world, ImageStore imageStore) {
-        scheduler.scheduleEvent(this, new Activity(this, world, imageStore), actionPeriod);
-        scheduler.scheduleEvent(this, new Animation(this, 0), animationPeriod);
+        scheduler.scheduleEvent(this, new Activity(this, world, imageStore), this.actionPeriod);
+        scheduler.scheduleEvent(this, new Animation(this, 0), this.animationPeriod);
     }
 }

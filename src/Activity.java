@@ -1,11 +1,19 @@
 public class Activity extends Action{
-    private Entity entity;
     private  WorldModel world;
     private ImageStore imageStore;
     public Activity(Entity entity, WorldModel world, ImageStore imageStore) {
         super(entity);
         this.world = world;
         this.imageStore =imageStore;
+    }
+
+    @Override
+    public WorldModel getWorld() {
+        return world;
+    }
+    public ImageStore getImageStore()
+    {
+        return imageStore;
     }
 
     public void executeAction(EventScheduler scheduler) {

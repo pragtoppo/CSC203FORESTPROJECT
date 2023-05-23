@@ -3,7 +3,6 @@ import processing.core.PImage;
 import java.util.List;
 
 public class SAPLING extends SAPTREE{
-
     private final int healthLimit =5;
     private final double animationPeriod = 1.000;
     private final double actionPeriod = 1.000;
@@ -18,9 +17,9 @@ public class SAPLING extends SAPTREE{
 
 
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
-        this.setHealth(getHealth() + 1);
-        if (transformPlant( world, scheduler, imageStore)) {
-            scheduler.scheduleEvent(this,new Activity(this, world, imageStore), actionPeriod);
+        this.setHealth(this.getHealth()+1);
+        if (transformPlant(world, scheduler, imageStore)) {
+            scheduler.scheduleEvent(this,new Activity(this, world, imageStore), this.actionPeriod);
         }
     }
 
@@ -38,7 +37,7 @@ public class SAPLING extends SAPTREE{
 
             world.addEntity(stump);
 
-            return true;
+            return false;
         } else if (this.getHealth() >= this.healthLimit) {
             TREE tree = new TREE(Functions.getTreeKey() + "_" + this.getId(), this.getPosition(),
                     imageStore.getImageList(Functions.TREE_KEY),
@@ -51,25 +50,15 @@ public class SAPLING extends SAPTREE{
             world.addEntity(tree);
             tree.scheduleActions(scheduler, world, imageStore);
 
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
     public PImage getCurrentImage()
     {
         return this.getImages().get(this.getImageIndex() % this.getImages().size());
     }
-//    public boolean transformPlant(WorldModel world, EventScheduler scheduler, ImageStore imageStore)
-//    {
-////        if (this.kind == EntityKind.TREE) {
-////            return !transformTree( world, scheduler, imageStore);
-////        } else if (this.kind == EntityKind.SAPLING) {
-//            return !transformSapling( world, scheduler, imageStore);
-////        } else {
-////            throw new UnsupportedOperationException(String.format("transformPlant not supported for %s", this));
-////        }
-//    }
 
     public String log() {
         return this.getId().isEmpty() ? null :

@@ -12,8 +12,8 @@ public class DUDE_FULL extends DUDEAbstract {
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         Optional<Entity> fullTarget = world.findNearest(this.getPosition(), new ArrayList<>(List.of(HOUSE.class)));
 
-        if (fullTarget.isPresent() && moveToFull(world, fullTarget.get(), scheduler)) {
-            transformFull(world, scheduler, imageStore);
+        if (fullTarget.isPresent() && this.moveToFull(world, fullTarget.get(), scheduler)) {
+            this.transformFull(world, scheduler, imageStore);
         } else {
             scheduler.scheduleEvent(this, new Activity(this, world, imageStore), this.getActionPeriod());
         }

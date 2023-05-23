@@ -84,8 +84,8 @@ public class FAIRY implements Entity, ActivityEntity, AnimationEntity{
         }
     }
     public void scheduleActions(EventScheduler scheduler, WorldModel world, ImageStore imageStore) {
-        scheduler.scheduleEvent(this, new Activity(this, world, imageStore), actionPeriod);
-        scheduler.scheduleEvent(this, new Animation(this, 0), animationPeriod);
+        scheduler.scheduleEvent(this, new Activity(this, world, imageStore), this.actionPeriod);
+        scheduler.scheduleEvent(this, new Animation(this, 0), this.animationPeriod);
     }
     public Point nextPositionFairy(WorldModel world, Point destPos) {
         int horiz = Integer.signum(destPos.getX() - this.getPosition().getX());

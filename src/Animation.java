@@ -1,10 +1,20 @@
 public class Animation extends Action{
     private int repeatCount;
-    private Entity entity;
     public Animation(Entity entity, int repeatCount) {
         super(entity);
         this.repeatCount = repeatCount;
     }
+
+    @Override
+    public WorldModel getWorld() {
+        return null;
+    }
+
+    @Override
+    public ImageStore getImageStore() {
+        return null;
+    }
+
     @Override
     public void executeAction(EventScheduler scheduler) {
         getEntity().nextImage();

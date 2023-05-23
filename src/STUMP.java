@@ -45,8 +45,4 @@ public class STUMP implements Entity{
     {
         return this.getImages().get(this.getImageIndex() % this.getImages().size());
     }
-    public void scheduleActions(EventScheduler scheduler, WorldModel world, ImageStore imageStore) {
-        scheduler.scheduleEvent(this, new Activity(this, world, imageStore), actionPeriod);
-        scheduler.scheduleEvent(this, new Animation(this, 0), animationPeriod);
-    }
 }

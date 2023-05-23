@@ -54,7 +54,7 @@ public final class Functions {
     private static final int DUDE_ANIMATION_PERIOD = 1;
     private static final int DUDE_LIMIT = 2;
     private static final int DUDE_NUM_PROPERTIES = 3;
-    private static final String STUMP_KEY = "stump";
+    public static final String STUMP_KEY = "stump";
     private static final int STUMP_NUM_PROPERTIES = 0;
 
 
