@@ -51,7 +51,7 @@ public abstract class DUDEAbstract implements Entity, ActivityEntity, AnimationE
         this.position = position;
         this.images = images;
         this.imageIndex = 0;
-        this.resourceLimit = resourceLimit;
+        this.resourceLimit = 0;
         this.actionPeriod = actionPeriod;
         this.animationPeriod = animationPeriod;
     }
