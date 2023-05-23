@@ -40,10 +40,10 @@ public class SAPLING extends SAPTREE{
             return false;
         } else if (this.getHealth() >= this.healthLimit) {
             TREE tree = new TREE(Functions.getTreeKey() + "_" + this.getId(), this.getPosition(),
-                    imageStore.getImageList(Functions.TREE_KEY),
-                    Functions.getNumFromRange(Functions.TREE_ACTION_MAX, Functions.TREE_ACTION_MIN),
-                    Functions.getNumFromRange(Functions.TREE_ANIMATION_MAX, Functions.TREE_ANIMATION_MIN),
-                    Functions.getIntFromRange(Functions.TREE_HEALTH_MAX, Functions.TREE_HEALTH_MIN));
+                    imageStore.getImageList(Functions.getTreeKey()),
+                    Functions.getNumFromRange(Functions.getTreeActionMax(), Functions.getTreeActionMin()),
+                    Functions.getNumFromRange(Functions.getTreeAnimationMax(), Functions.getTreeAnimationMin()),
+                    Functions.getIntFromRange(Functions.getTreeHealthMax(), Functions.getTreeHealthMin()));
 
             world.removeEntity( scheduler, this);
 

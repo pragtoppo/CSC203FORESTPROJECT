@@ -8,7 +8,6 @@ public class STUMP implements Entity{
     private List<PImage> images;
     private int imageIndex;
     private double animationPeriod;
-    private double actionPeriod;
     public STUMP(String id, Point position, List<PImage> images) {
         this.id = id;
         this.position = position;
