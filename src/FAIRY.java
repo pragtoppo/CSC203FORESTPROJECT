@@ -3,6 +3,8 @@ import processing.core.PImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 public class FAIRY implements Entity, ActivityEntity, AnimationEntity{
     String id;
@@ -88,19 +90,27 @@ public class FAIRY implements Entity, ActivityEntity, AnimationEntity{
         scheduler.scheduleEvent(this, new Animation(this, 0), this.animationPeriod);
     }
     public Point nextPositionFairy(WorldModel world, Point destPos) {
-        int horiz = Integer.signum(destPos.getX() - this.getPosition().getX());
-        Point newPos = new Point(this.getPosition().getX() + horiz, this.getPosition().getY());
-
-        if (horiz == 0 || world.isOccupied( newPos) && world.getOccupancyCell( newPos).getClass() != HOUSE.class) {
-            int vert = Integer.signum(destPos.getY() - this.getPosition().getY());
-            newPos = new Point(this.getPosition().getX(), this.getPosition().getY() + vert);
-
-            if (vert == 0 || world.isOccupied( newPos) && world.getOccupancyCell( newPos).getClass() != HOUSE.class) {
-                newPos = this.getPosition();
-            }
+        AStarPathingStrategy pathingStrategy = new AStarPathingStrategy();
+        Predicate<Point> canPassThrough = point -> !world.isOccupied(point) && world.withinBounds(point);
+        BiPredicate<Point, Point> withinReach = Point::adjacent;
+        List<Point> points = pathingStrategy.computePath(this.position, destPos, canPassThrough, withinReach, PathingStrategy.CARDINAL_NEIGHBORS );
+        if(points.size() == 0)
+        {
+            return this.position;
         }
+        return points.get(0);
+//        int horiz = Integer.signum(destPos.getX() - this.getPosition().getX());
+//        Point newPos = new Point(this.getPosition().getX() + horiz, this.getPosition().getY());
+//        if (horiz == 0 || world.isOccupied( newPos) && world.getOccupancyCell( newPos).getClass() != HOUSE.class) {
+//            int vert = Integer.signum(destPos.getY() - this.getPosition().getY());
+//            newPos = new Point(this.getPosition().getX(), this.getPosition().getY() + vert);
+//
+//            if (vert == 0 || world.isOccupied( newPos) && world.getOccupancyCell( newPos).getClass() != HOUSE.class) {
+//                newPos = this.getPosition();
+//            }
+//        }
 
-        return newPos;
+        //return newPos;
     }
 
 }

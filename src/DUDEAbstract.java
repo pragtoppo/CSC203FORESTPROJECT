@@ -1,6 +1,8 @@
 import processing.core.PImage;
 
 import java.util.List;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 public abstract class DUDEAbstract implements Entity, ActivityEntity, AnimationEntity {
     private String id;
@@ -57,19 +59,28 @@ public abstract class DUDEAbstract implements Entity, ActivityEntity, AnimationE
     }
 
      Point nextPositionDude(WorldModel world, Point destPos) {
-        int horiz = Integer.signum(destPos.getX() - this.position.getX());
-        Point newPos = new Point(this.position.getX() + horiz, this.position.getY());
-
-        if (horiz == 0 || world.isOccupied(newPos) && world.getOccupancyCell(newPos).getClass() != STUMP.class) {
-            int vert = Integer.signum(destPos.getY() - this.position.getY());
-            newPos = new Point(this.position.getX(), this.position.getY() + vert);
-
-            if (vert == 0 || world.isOccupied(newPos) && world.getOccupancyCell(newPos).getClass() != STUMP.class) {
-                newPos = this.position;
-            }
-        }
-
-        return newPos;
+         AStarPathingStrategy pathingStrategy = new AStarPathingStrategy();
+         Predicate<Point> canPassThrough = point -> (!world.isOccupied(point) || world.getOccupancyCell(point) instanceof STUMP) && world.withinBounds(point);
+         BiPredicate<Point, Point> withinReach = Point::adjacent;
+         List<Point> points = pathingStrategy.computePath(this.position, destPos, canPassThrough, withinReach, PathingStrategy.CARDINAL_NEIGHBORS );
+         if(points.size() == 0)
+         {
+             return this.position;
+         }
+         return points.get(0);
+//        int horiz = Integer.signum(destPos.getX() - this.position.getX());
+//        Point newPos = new Point(this.position.getX() + horiz, this.position.getY());
+//
+//        if (horiz == 0 || world.isOccupied(newPos) && world.getOccupancyCell(newPos).getClass() != STUMP.class) {
+//            int vert = Integer.signum(destPos.getY() - this.position.getY());
+//            newPos = new Point(this.position.getX(), this.position.getY() + vert);
+//
+//            if (vert == 0 || world.isOccupied(newPos) && world.getOccupancyCell(newPos).getClass() != STUMP.class) {
+//                newPos = this.position;
+//            }
+//        }
+//
+//        return newPos;
     }
 
 }
