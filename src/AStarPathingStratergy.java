@@ -94,7 +94,7 @@ class AStarPathingStrategy
 
         private List<Point> reconstructPath (Node node)
         {
-            System.out.println("L");
+            System.out.println("reached reconstruct");
             List<Point> path = new ArrayList<>();
             Node current = node;
             while (current.prior != null) {
